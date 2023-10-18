@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://bnxg2qyvqvyav"]
+
+[ext_resource type="Script" path="res://BoidController.cs" id="1_e41yu"]
+[ext_resource type="Script" path="res://ParticleCam.cs" id="2_vk61j"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4gchy"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_ebthm"]
+sky_material = SubResource("ProceduralSkyMaterial_4gchy")
+
+[sub_resource type="Environment" id="Environment_pdxdg"]
+background_mode = 1
+background_color = Color(0.0705882, 0.0705882, 0.0705882, 1)
+sky = SubResource("Sky_ebthm")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b20t6"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4qgvy"]
+material = SubResource("StandardMaterial3D_b20t6")
+
+[sub_resource type="MultiMesh" id="MultiMesh_2ejet"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("CapsuleMesh_4qgvy")
+
+[node name="Root" type="Node3D" node_paths=PackedStringArray("_boidMultimesh", "_perfCounters", "_showGridBox", "_showVolumeBox")]
+script = ExtResource("1_e41yu")
+_boidMultimesh = NodePath("MultiMeshInstance3D")
+_perfCounters = NodePath("Label")
+_showGridBox = NodePath("GridCheckBox")
+_showVolumeBox = NodePath("VolumeCheckBox")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pdxdg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+top_level = true
+multimesh = SubResource("MultiMesh_2ejet")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.78043, 0, 0.625243, 0, 1, 0, -0.625243, 0, 0.78043, 106.253, 0, 96.131)
+size = 50.0
+script = ExtResource("2_vk61j")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 197.0
+offset_bottom = 23.0
+
+[node name="GridCheckBox" type="CheckBox" parent="."]
+offset_top = 76.0
+offset_right = 24.0
+offset_bottom = 100.0
+text = "Show Grid"
+
+[node name="VolumeCheckBox" type="CheckBox" parent="."]
+offset_top = 103.0
+offset_right = 107.0
+offset_bottom = 134.0
+button_pressed = true
+text = "Show Volume"
