@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bnxg2qyvqvyav"]
+[gd_scene load_steps=10 format=3 uid="uid://bnxg2qyvqvyav"]
 
 [ext_resource type="Script" path="res://BoidController.cs" id="1_e41yu"]
 [ext_resource type="Script" path="res://ParticleCam.cs" id="2_vk61j"]
@@ -29,12 +29,18 @@ transform_format = 1
 use_colors = true
 mesh = SubResource("CapsuleMesh_4qgvy")
 
-[node name="Root" type="Node3D" node_paths=PackedStringArray("_boidMultimesh", "_perfCounters", "_showGridBox", "_showVolumeBox")]
+[sub_resource type="LabelSettings" id="LabelSettings_5h6au"]
+
+[node name="Root" type="Node3D" node_paths=PackedStringArray("_boidMultimesh", "_perfCounters", "_showGridBox", "_showVolumeBox", "_numBoidsSlider", "_speedSlider", "_lowDensityColorPicker", "_highDensityColorPicker")]
 script = ExtResource("1_e41yu")
 _boidMultimesh = NodePath("MultiMeshInstance3D")
-_perfCounters = NodePath("Label")
-_showGridBox = NodePath("GridCheckBox")
-_showVolumeBox = NodePath("VolumeCheckBox")
+_perfCounters = NodePath("VBoxContainer/Label")
+_showGridBox = NodePath("VBoxContainer/GridCheckBox")
+_showVolumeBox = NodePath("VBoxContainer/VolumeCheckBox")
+_numBoidsSlider = NodePath("VBoxContainer/HSlider_Count")
+_speedSlider = NodePath("VBoxContainer/HSlider_Speed")
+_lowDensityColorPicker = NodePath("VBoxContainer/ColorNone/ColorPickerButton")
+_highDensityColorPicker = NodePath("VBoxContainer/ColorMax/ColorPickerButton")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_pdxdg")
@@ -52,19 +58,64 @@ transform = Transform3D(0.78043, 0, 0.625243, 0, 1, 0, -0.625243, 0, 0.78043, 10
 size = 50.0
 script = ExtResource("2_vk61j")
 
-[node name="Label" type="Label" parent="."]
-offset_right = 197.0
-offset_bottom = 23.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 11.0
+offset_right = 144.0
+offset_bottom = 186.0
+scale = Vector2(0.68, 0.68)
 
-[node name="GridCheckBox" type="CheckBox" parent="."]
-offset_top = 76.0
-offset_right = 24.0
-offset_bottom = 100.0
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_5h6au")
+
+[node name="GridCheckBox" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
 text = "Show Grid"
 
-[node name="VolumeCheckBox" type="CheckBox" parent="."]
-offset_top = 103.0
-offset_right = 107.0
-offset_bottom = 134.0
+[node name="VolumeCheckBox" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
 button_pressed = true
 text = "Show Volume"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Active Boids"
+
+[node name="HSlider_Count" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+rounded = true
+
+[node name="Label3" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Speed"
+
+[node name="HSlider_Speed" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 1.0
+
+[node name="ColorNone" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ColorNone"]
+layout_mode = 2
+text = "Density Color Low"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/ColorNone"]
+custom_minimum_size = Vector2(26.64, 0)
+layout_mode = 2
+
+[node name="ColorMax" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ColorMax"]
+layout_mode = 2
+text = "Density Color High"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/ColorMax"]
+custom_minimum_size = Vector2(26.64, 0)
+layout_mode = 2
